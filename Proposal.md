@@ -1,6 +1,6 @@
 # Cart's Icecream Shop
 ## Executive Summary
-Cart's Icecream Shop is where customers can customize and order a cone or bowl of icecream. The main purpose involves understanding customer trends (i.e., understanding what types of icecream users like). This purpose gears toward icecream parlors wanting to know more about people's icecream preferences.
+Cart's Icecream Shop is an app where customers can order a personalized cone or bowl of icecream. Designed for icecream parlors, this app helps to uncover consumer trends to help drive business planning and sales efficiency.
 
 ## Models
 * Icecream
