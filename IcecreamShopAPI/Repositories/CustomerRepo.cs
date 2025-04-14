@@ -59,5 +59,15 @@ namespace IcecreamShopAPI.Repositories {
             SaveCustomerList(customers);
             return customer;
         }
+
+        public List<Icecream> GetIcecreamsByDate(Customer customer, DateTime dateTime) {
+            foreach (List<Icecream> key in customer.IcecreamHistory.Keys) {
+                if (customer.IcecreamHistory[key].Equals(dateTime)) {
+                    return key;
+                }
+            }
+
+            return [];
+        }
     }
 }
