@@ -41,8 +41,6 @@ namespace IcecreamShopAPI.Services {
             catch (ArgumentNullException ex) {
                 throw new(ex.Message);
             } 
-
-            throw new NotImplementedException("Work in progress");
         }
         public double CalculateTotalCost(List<Icecream> icecreamList) {
             double cost = 0.0;
@@ -56,15 +54,31 @@ namespace IcecreamShopAPI.Services {
             // tax = 15%
             return cost *= 1.15;
         }
-        // TODO: Set up transaction input validation for CRUD operations
+        public bool ValidateTransaction(Transaction transaction) {
+            return (
+                _cashierRepo.GetCashierByPhone(transaction.CashierPhoneNumber) is not null &&
+                _customerRepo.GetCustomerByEmail(transaction.CustomerEmail) is not null &&
+                transaction.Icecreams.Count > 0
+            );
+        }
         public List<Transaction> GetTransactions() {
             return _transactionRepo.GetTransactions();
         }
         public Transaction UpdateTransaction(Transaction transaction) {
-            return _transactionRepo.UpdateTransaction(transaction);
+            if (ValidateTransaction(transaction)) {
+                return _transactionRepo.UpdateTransaction(transaction);
+            }
+            else {
+                throw new ArgumentException("Transaction contains invalid input");
+            }
         }
         public Transaction DeleteTransaction(Transaction transaction) {
-            return _transactionRepo.DeleteTransaction(transaction);
+            if (ValidateTransaction(transaction)) {
+                return _transactionRepo.DeleteTransaction(transaction);
+            }
+            else {
+                throw new ArgumentException("Transaction contains invalid input");
+            }
         }
     }
 }
