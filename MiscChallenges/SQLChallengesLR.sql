@@ -128,11 +128,80 @@ GROUP BY a.ArtistId
 HAVING COUNT(al.AlbumId) = 0;
 
 -- 2. which artists did not record any tracks of the Latin genre?
-SELECT a.ArtistId, COUNT(g.GenreId) AS 'Latin Song Count'
+SELECT a.ArtistId
 FROM Artist a 
 JOIN Album al ON a.ArtistId = al.AlbumId
 LEFT JOIN Track t ON al.AlbumId = t.AlbumId
 LEFT JOIN Genre g ON t.GenreId = g.GenreId
-WHERE g.Name = 'Latin'
-GROUP BY a.ArtistId;
--- HAVING COUNT(g.GenreId) = 0
+WHERE g.Name != 'Latin'
+GROUP BY a.ArtistId
+ORDER BY a.ArtistId;
+-- 3. which video track has the longest length? (use media type table)
+SELECT TOP 1 t.Name, t.Milliseconds
+FROM Track t
+RIGHT JOIN MediaType mt ON t.MediaTypeId = mt.MediaTypeId
+ORDER BY t.Milliseconds DESC;
+-- 4. find the names of the customers who live in the same city as the 
+--    boss employee (the one who reports to nobody)
+SELECT c.FirstName + ' ' + c.LastName AS 'Full Name'
+FROM Customer c 
+JOIN Employee e ON c.SupportRepId = EmployeeId
+WHERE e.ReportsTo IS NULL AND (c.City = e.City);
+-- 5. how many audio tracks were bought by German customers, and what was 
+--    the total price paid for them?
+SELECT COUNT(t.TrackId), SUM(i.Total)
+FROM Customer c
+JOIN Invoice i ON c.CustomerId = i.CustomerId
+JOIN InvoiceLine iL ON i.InvoiceId = iL.InvoiceId
+JOIN Track t ON iL.TrackId = t.TrackId
+JOIN MediaType mT ON t.MediaTypeId = mT.MediaTypeId
+WHERE c.Country = 'Germany' AND mT.MediaTypeId != 3;
+-- 6. list the names and countries of the customers supported by an employee 
+--    who was hired younger than 35.
+SELECT c.FirstName + ' ' + c.LastName AS 'Full Name', c.Country
+FROM Customer c
+JOIN Employee e ON c.SupportRepId = e.EmployeeId
+WHERE (YEAR(e.HireDate) - YEAR(BirthDate)) < 35;
+-- DML exercises
+
+-- 1. insert two new records into the employee table.
+INSERT INTO Employee(LastName,
+    FirstName,
+    Title,
+    ReportsTo,
+    BirthDate,
+    HireDate,
+    Address,
+    City,
+    State,
+    Country,
+    PostalCode,
+    Phone,
+    Fax,
+    Email
+    ) VALUES 
+    ('Doe', 'John', 'Software Engineer', 101, '1990-05-15', '2022-08-01', '123 Main St', 'Anytown', 'FL', 'USA', '33101', '555-123-4567', '239-555-8765', 'john.doe@example.com'),
+    ('Smith', 'Jane', 'Data Analyst', 101, '1988-11-20', '2023-01-15', '456 Oak Ave', 'Someville', 'FL', 'USA', '33102', '555-987-6543', '239-555-8765', 'jane.smith@example.com');
+-- 2. insert two new records into the tracks table.
+INSERT INTO Track(
+    Name, 
+    AlbumId, 
+    MediaTypeId, 
+    GenreId, 
+    Composer, 
+    Milliseconds, 
+    Bytes, 
+    UnitPrice
+    ) VALUES 
+    ('The Trooper', 1, 1, 'Iron Maiden', 252602, 8288798, 0.99),
+    ('Stairway to Heaven', 1, 1, 'Jimmy Page & Robert Plant', 482937, 15795858, 0.99);
+-- 3. update customer Aaron Mitchell's name to Robert Walter
+UPDATE Customer 
+SET LastName = 'Walter', FirstName = 'Robert'
+WHERE FirstName = 'Aaron' AND LastName = 'Mitchell';
+-- 4. delete one of the employees you inserted.
+DELETE FROM Employee
+WHERE EmployeeId = 10;
+-- 5. delete customer Robert Walter.
+DELETE FROM Customer
+WHERE FirstName = 'Robert' AND LastName = 'Walter';
