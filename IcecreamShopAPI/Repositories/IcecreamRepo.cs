@@ -33,7 +33,7 @@ namespace IcecreamShopAPI.Repositories {
 
         public Icecream UpdateIcecream(Icecream icecream) {
             List<Icecream> icecreams = GetAllIcecream();
-            int index = icecreams.FindIndex(i => i.Equals(icecream));
+            int index = icecreams.FindIndex(i => i.Id.Equals(icecream.Id));
             icecream.Customers = icecreams[index].Customers;
             icecreams[index] = icecream;
             SaveIcecreamList(icecreams);

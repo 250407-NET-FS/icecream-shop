@@ -53,8 +53,9 @@ namespace IcecreamShopAPI.Repositories {
             SaveCustomerList(customers);
             return customer;
         }
-        public Customer RemoveCustomer(Customer customer) {
+        public Customer RemoveCustomer(string email) {
             List<Customer> customers = GetCustomers();
+            Customer customer = customers.Find(c => c.Email.Equals(email))!;
             customers.Remove(customer);
             SaveCustomerList(customers);
             return customer;

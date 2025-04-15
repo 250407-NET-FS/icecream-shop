@@ -33,8 +33,14 @@ namespace IcecreamShopAPI.Services {
                 throw new ArgumentException("Customer contains invalid input");
             }
         }
-        public Customer DeleteCustomer(Customer customer) {
-            return _customerRepo.RemoveCustomer(customer);
+        public Customer DeleteCustomer(string email) {
+            Regex pattern = EmailRegex();
+            if (pattern.IsMatch(email)) {
+                return _customerRepo.RemoveCustomer(email);
+            }
+            else {
+                throw new ArgumentException("Email is invalid");
+            }
         }
         public List<Customer> GetCustomerList() {
             return _customerRepo.GetCustomers();

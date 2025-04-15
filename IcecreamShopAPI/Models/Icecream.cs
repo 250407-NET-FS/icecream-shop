@@ -10,6 +10,7 @@ namespace IcecreamShopAPI.Models {
     }
     
     class Icecream {
+        public Guid Id {get;} = Guid.NewGuid();
         public int Scoops {get; set;}
         public List<string> Flavors {get; set;} = [];
         // Icecream on a cone or on a bowl?

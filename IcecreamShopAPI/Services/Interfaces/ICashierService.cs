@@ -7,5 +7,6 @@ namespace IcecreamShopAPI.Services.Interfaces {
         public Cashier UpdateCashier(Cashier cashier);
         public Cashier DeleteCashier(Cashier cashier);
         public List<Cashier> GetCashierList();
+        public Cashier GetCashierByPhone(string phoneNumber);
     }
 }

@@ -2,6 +2,7 @@ using System.Text.RegularExpressions;
 using IcecreamShopAPI.Models;
 using IcecreamShopAPI.Repositories;
 using IcecreamShopAPI.Services.Interfaces;
+using Microsoft.Extensions.FileSystemGlobbing.Internal.Patterns;
 
 namespace IcecreamShopAPI.Services {
     partial class CashierService: ICashierService {
@@ -40,6 +41,15 @@ namespace IcecreamShopAPI.Services {
         }
         public List<Cashier> GetCashierList() {
             return _cashierRepo.GetCashiers();
+        }
+        public Cashier GetCashierByPhone(string phoneNumber) {
+            Regex pattern = PhoneRegex();
+            if (pattern.IsMatch(phoneNumber)) {
+                return _cashierRepo.GetCashierByPhone(phoneNumber);
+            }
+            else {
+                throw new ArgumentException("Phone number invalid");
+            }
         }
         [GeneratedRegex(@"^[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]")]
         private static partial Regex PhoneRegex();
