@@ -2,7 +2,7 @@ using System.Text.Json;
 using IcecreamShopAPI.Repositories.Interfaces;
 
 namespace IcecreamShopAPI.Repositories {
-    class TransactionRepo: ITransactionRepo {
+    public class TransactionRepo: ITransactionRepo {
         private readonly string _jsonPath;
 
         public TransactionRepo() {

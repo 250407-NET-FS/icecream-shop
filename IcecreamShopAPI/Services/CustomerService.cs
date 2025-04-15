@@ -1,13 +1,13 @@
-using IcecreamShopAPI.Repositories;
+using IcecreamShopAPI.Repositories.Interfaces;
 using IcecreamShopAPI.Services.Interfaces;
 using IcecreamShopAPI.Models;
 using System.Text.RegularExpressions;
 
 namespace IcecreamShopAPI.Services {
-    partial class CustomerService: ICustomerService {
-        private readonly CustomerRepo _customerRepo;
+    public partial class CustomerService: ICustomerService {
+        private readonly ICustomerRepo _customerRepo;
 
-        public CustomerService(CustomerRepo customerRepo) {
+        public CustomerService(ICustomerRepo customerRepo) {
             _customerRepo = customerRepo;
         }
         public bool ValidateCustomer(Customer customer) {

@@ -1,14 +1,14 @@
 using System.Text.RegularExpressions;
 using IcecreamShopAPI.Models;
-using IcecreamShopAPI.Repositories;
+using IcecreamShopAPI.Repositories.Interfaces;
 using IcecreamShopAPI.Services.Interfaces;
 using Microsoft.Extensions.FileSystemGlobbing.Internal.Patterns;
 
 namespace IcecreamShopAPI.Services {
-    partial class CashierService: ICashierService {
-        private readonly CashierRepo _cashierRepo;
+    public partial class CashierService: ICashierService {
+        private readonly ICashierRepo _cashierRepo;
 
-        public CashierService(CashierRepo cashierRepo) {
+        public CashierService(ICashierRepo cashierRepo) {
             _cashierRepo = cashierRepo;
         }
         public bool ValidateCashier(Cashier cashier) {

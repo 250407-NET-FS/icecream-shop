@@ -1,5 +1,5 @@
 namespace IcecreamShopAPI.Repositories.Interfaces {
-    interface ITransactionRepo {
+    public interface ITransactionRepo {
         public List<Transaction> GetTransactions();
         public List<Transaction> GetTransactionsByDate(DateTime date);
         public Transaction GetTransactionById(Guid id);

@@ -1,7 +1,7 @@
 using IcecreamShopAPI.Models;
 
 namespace IcecreamShopAPI {
-    class Transaction {
+    public class Transaction {
         public Guid Id {get;} = Guid.NewGuid();
         public string CashierPhoneNumber {get; set;} = string.Empty;
         public string CustomerEmail {get; set;} = string.Empty;

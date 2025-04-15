@@ -1,7 +1,7 @@
 using IcecreamShopAPI.Models;
 
 namespace IcecreamShopAPI.Repositories.Interfaces {
-    interface ICashierRepo {
+    public interface ICashierRepo {
         public List<Cashier> GetCashiers();
         public Cashier GetCashierByPhone(string phoneNumber);
         public Cashier AddCashier(Cashier cashier);

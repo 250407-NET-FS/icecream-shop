@@ -1,18 +1,18 @@
 using IcecreamShopAPI.Models;
-using IcecreamShopAPI.Repositories;
+using IcecreamShopAPI.Repositories.Interfaces;
 using IcecreamShopAPI.Services.Interfaces;
 using IcecreamShopAPI.DTOs;
 
 namespace IcecreamShopAPI.Services {
-    class TransactionService: ITransactionService {
-        private readonly CustomerRepo _customerRepo;
-        private readonly CashierRepo _cashierRepo;
-        private readonly TransactionRepo _transactionRepo;
+    public class TransactionService: ITransactionService {
+        private readonly ICustomerRepo _customerRepo;
+        private readonly ICashierRepo _cashierRepo;
+        private readonly ITransactionRepo _transactionRepo;
 
         public TransactionService(
-            CustomerRepo customerRepo, 
-            CashierRepo cashierRepo, 
-            TransactionRepo transactionRepo) {
+            ICustomerRepo customerRepo, 
+            ICashierRepo cashierRepo, 
+            ITransactionRepo transactionRepo) {
                 _customerRepo = customerRepo;
                 _cashierRepo = cashierRepo;
                 _transactionRepo = transactionRepo;

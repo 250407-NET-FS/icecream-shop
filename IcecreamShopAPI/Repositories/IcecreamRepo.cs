@@ -3,7 +3,7 @@ using IcecreamShopAPI.Models;
 using IcecreamShopAPI.Repositories.Interfaces;
 
 namespace IcecreamShopAPI.Repositories {
-    class IceCreamRepo : IIcecreamRepo {
+    public class IceCreamRepo : IIcecreamRepo {
         private readonly string _jsonPath;
 
         public IceCreamRepo() {

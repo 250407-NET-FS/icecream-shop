@@ -1,12 +1,12 @@
 using IcecreamShopAPI.Services.Interfaces;
 using IcecreamShopAPI.Models;
-using IcecreamShopAPI.Repositories;
+using IcecreamShopAPI.Repositories.Interfaces;
 
 namespace IcecreamShopAPI.Services {
-    class IcecreamService: IIcecreamService {
-        private readonly IceCreamRepo _icecreamRepo;
+    public class IcecreamService: IIcecreamService {
+        private readonly IIcecreamRepo _icecreamRepo;
 
-        public IcecreamService(IceCreamRepo iceCreamRepo) {
+        public IcecreamService(IIcecreamRepo iceCreamRepo) {
             _icecreamRepo = iceCreamRepo;
         }
         public bool ValidateIcecream(Icecream icecream) {

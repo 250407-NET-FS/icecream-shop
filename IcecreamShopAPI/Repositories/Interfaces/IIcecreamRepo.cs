@@ -1,7 +1,7 @@
 using IcecreamShopAPI.Models;
 
 namespace IcecreamShopAPI.Repositories.Interfaces {
-    interface IIcecreamRepo {
+    public interface IIcecreamRepo {
         public List<Icecream> GetAllIcecream();
         public Icecream AddIcecream(Icecream icecream);
         public void SaveIcecreamList(List<Icecream> icecream);

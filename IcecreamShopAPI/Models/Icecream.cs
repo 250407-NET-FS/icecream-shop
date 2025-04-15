@@ -1,15 +1,15 @@
 using IcecreamShopAPI.Models;
 
 namespace IcecreamShopAPI.Models {
-    enum Size {
-        XSMALL,
-        SMALL,
-        MEDIUM,
-        LARGE,
-        XLARGE
+    public enum Size {
+        XSmall,
+        Small,
+        Medium,
+        Large,
+        XLarge
     }
     
-    class Icecream {
+    public class Icecream {
         public Guid Id {get;} = Guid.NewGuid();
         public int Scoops {get; set;}
         public List<string> Flavors {get; set;} = [];

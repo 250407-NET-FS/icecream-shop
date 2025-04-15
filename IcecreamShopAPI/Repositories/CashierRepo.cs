@@ -3,7 +3,7 @@ using IcecreamShopAPI.Models;
 using IcecreamShopAPI.Repositories.Interfaces;
 
 namespace IcecreamShopAPI.Repositories {
-    class CashierRepo : ICashierRepo {
+    public class CashierRepo : ICashierRepo {
         private readonly string _jsonPath;
 
         public CashierRepo() {

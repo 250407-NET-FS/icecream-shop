@@ -1,36 +1,48 @@
 using Moq;
 using IcecreamShopAPI.Models;
 using IcecreamShopAPI.Services;
-using IcecreamShopAPI.Repositories;
+using IcecreamShopAPI.Repositories.Interfaces;
 
 namespace IceCreamShopAPITests {
     public class IcecreamTest {
-        private readonly Mock<IIceCreamRepo> _icecreamRepo = new();
+        private readonly Mock<IIcecreamRepo> _icecreamRepo = new();
 
         private readonly IcecreamService icecreamService;
 
-        // Test data
-        private const int Scoops = 2;
-        private const List<string> Flavors = ["Blueberry", "Strawberry"];
+        // Test data 
+        private const int Scoops = 1;
+        // To be converted as a list in the test
+        private const string Flavor = "Blueberry";
         private const bool OnCone = true;
-        private const List<string> Toppings = ["Cherry"];
-        private const Size Size = Size.MEDIUM;
-        private readonly List<Customer> customers = [new() {Name = "Lucas Rodriguez", Email = "coldcoder9225@proton.me"}];
+        // To be converted as a list in the test
+        private const string Topping = "Cherry";
+        //  to be converted as an enum value in the test
+        private const int TestSize = 2;
+        // to be given to a test customer object
+        private const string Name = "Lucas Rodriguez";
+        // to be given to a test customer object
+        private const string Email = "coldcoder9225@proton.me";
+
+        private readonly Customer TestCustomer = new() {Name = "Lucas Rodriguez", Email = "coldcoder9225@proton.me"};
 
         public IcecreamTest() {
             icecreamService = new(_icecreamRepo.Object);
         }
-        [Fact]
-        public void AddIcecream_ValidRequest(int _scoops, List<string> _flavors, bool _onCone, List<string> _toppings, Size _size, List<Customer> _customers) 
+        [Theory]
+        [InlineData(Scoops, Flavor, OnCone, Topping, TestSize, Name, Email)]
+        public void AddIcecream_ValidRequest(
+            int _scoops, string _flavor, bool _onCone, string _topping, 
+            int _size, string _name, string _email
+        ) 
         {
             // Arrange
             Icecream icecream = new () {
                 Scoops = _scoops, 
-                Flavors = _flavors, 
+                Flavors = [_flavor], 
                 OnCone = _onCone, 
-                Toppings = _toppings, 
-                Size = _size, 
-                Customers = _customers
+                Toppings = [_topping], 
+                Size = (Size) _size, 
+                Customers = [new Customer(){Name = _name, Email = _email}]
             };
 
             // Act
