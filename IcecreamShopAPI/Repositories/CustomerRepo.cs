@@ -7,7 +7,7 @@ namespace IcecreamShopAPI.Repositories {
         private readonly string _jsonPath;
 
         public CustomerRepo() {
-            _jsonPath = "./Data-Files/customers.json";
+            _jsonPath = "./Data/customers.json";
         }
         public List<Customer> GetCustomers() {
             try {
@@ -59,16 +59,6 @@ namespace IcecreamShopAPI.Repositories {
             customers.Remove(customer);
             SaveCustomerList(customers);
             return customer;
-        }
-
-        public List<Icecream> GetIcecreamsByDate(Customer customer, DateTime dateTime) {
-            foreach (List<Icecream> key in customer.IcecreamHistory.Keys) {
-                if (customer.IcecreamHistory[key].Equals(dateTime)) {
-                    return key;
-                }
-            }
-
-            return [];
         }
     }
 }

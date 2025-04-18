@@ -8,6 +8,5 @@ namespace IcecreamShopAPI.Repositories.Interfaces {
         public void SaveCustomerList(List<Customer> customers);
         public Customer UpdateCustomer(Customer customer);
         public Customer RemoveCustomer(string email);
-        public List<Icecream> GetIcecreamsByDate(Customer customer, DateTime dateTime);
     }
 }

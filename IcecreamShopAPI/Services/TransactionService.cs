@@ -5,14 +5,17 @@ using IcecreamShopAPI.DTOs;
 
 namespace IcecreamShopAPI.Services {
     public class TransactionService: ITransactionService {
+        private readonly IIcecreamRepo _icecreamRepo;
         private readonly ICustomerRepo _customerRepo;
         private readonly ICashierRepo _cashierRepo;
         private readonly ITransactionRepo _transactionRepo;
 
         public TransactionService(
+            IIcecreamRepo icecreamRepo,
             ICustomerRepo customerRepo, 
             ICashierRepo cashierRepo, 
             ITransactionRepo transactionRepo) {
+                _icecreamRepo = icecreamRepo;
                 _customerRepo = customerRepo;
                 _cashierRepo = cashierRepo;
                 _transactionRepo = transactionRepo;
@@ -30,7 +33,7 @@ namespace IcecreamShopAPI.Services {
                     CashierPhoneNumber = cashier.PhoneNumber, 
                     CustomerEmail = customer.Email, 
                 };
-                transaction.Icecreams = _customerRepo.GetIcecreamsByDate(customer, transaction.CreatedDate);
+                transaction.Icecreams = [_icecreamRepo.GetAllIcecream()[transaction.Id]];
                 transaction.TotalCost = CalculateTotalCost(transaction.Icecreams);
 
                 // Save and add new transaction to list

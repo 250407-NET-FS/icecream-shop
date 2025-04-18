@@ -6,8 +6,13 @@ using Microsoft.EntityFrameworkCore;
 using IcecreamShopAPI.Repositories;
 using IcecreamShopAPI.Repositories.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using IcecreamShopAPI.Data;
 
 var builder = WebApplication.CreateBuilder(args);
+
+string connection = File.ReadAllText("../conn_string.env");
+
+builder.Services.AddDbContext<ShopDbContext>(options => options.UseSqlServer(connection));
 
 builder.Services.AddSingleton<IIcecreamRepo, IceCreamRepo>();
 builder.Services.AddSingleton<ICashierRepo, CashierRepo>();
@@ -26,6 +31,7 @@ builder.Services.AddOpenApiDocument(config =>
     config.Title = "icecreamShopAPI";
     config.Version = "v0.5";
 });
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -39,6 +45,9 @@ if (app.Environment.IsDevelopment())
         config.DocExpansion = "list";
     });
 }
+
+app.UseHttpsRedirection();
+
 app.MapGet("/", () => "Hello, and Welcome to Cart's Icecream Shop!");
 // Icecream Endpoints
 app.MapGet("/icecreams", (IIcecreamService icecreamService) => {

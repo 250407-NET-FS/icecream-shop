@@ -7,7 +7,7 @@ namespace IcecreamShopAPI.Repositories {
         private readonly string _jsonPath;
 
         public TransactionRepo() {
-            _jsonPath = "./Data-Files/transactions.json";
+            _jsonPath = "./Data/transactions.json";
         }
         public List<Transaction> GetTransactions() {
             try {

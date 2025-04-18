@@ -7,7 +7,7 @@ namespace IcecreamShopAPI.Repositories {
         private readonly string _jsonPath;
 
         public CashierRepo() {
-            _jsonPath = "./Data-Files/cashiers.json";
+            _jsonPath = "./Data/cashiers.json";
         }
         public List<Cashier> GetCashiers() {
             try {
