@@ -3,10 +3,16 @@ using IcecreamShopAPI.Services.Interfaces;
 using IcecreamShopAPI.Models;
 using IcecreamShopAPI.DTOs;
 using Microsoft.EntityFrameworkCore;
-using System.Transactions;
-using IcecreamShopAPI;
+using IcecreamShopAPI.Repositories;
+using IcecreamShopAPI.Repositories.Interfaces;
+using Microsoft.AspNetCore.Mvc;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddSingleton<IIcecreamRepo, IceCreamRepo>();
+builder.Services.AddSingleton<ICashierRepo, CashierRepo>();
+builder.Services.AddSingleton<ICustomerRepo, CustomerRepo>();
+builder.Services.AddSingleton<ITransactionRepo, TransactionRepo>();
 
 builder.Services.AddSingleton<IIcecreamService, IcecreamService>();
 builder.Services.AddSingleton<ICashierService, CashierService>();
@@ -33,7 +39,6 @@ if (app.Environment.IsDevelopment())
         config.DocExpansion = "list";
     });
 }
-// Introductory Endpoint
 app.MapGet("/", () => "Hello, and Welcome to Cart's Icecream Shop!");
 // Icecream Endpoints
 app.MapGet("/icecreams", (IIcecreamService icecreamService) => {
@@ -45,7 +50,7 @@ app.MapGet("/icecreams", (IIcecreamService icecreamService) => {
     }
 }); 
 
-app.MapPost("/icecreams", (Icecream icecream, IIcecreamService icecreamService) => {
+app.MapPost("/icecreams", ([FromBody] Icecream icecream, IIcecreamService icecreamService) => {
     try {
         return Results.Created("/icecreams{icecream.Id}", icecreamService.AddIcecream(icecream));
     }
@@ -57,9 +62,9 @@ app.MapPost("/icecreams", (Icecream icecream, IIcecreamService icecreamService) 
     }
 });
 
-app.MapPatch("/icecreams", (Icecream icecream, IIcecreamService icecreamService) => {
+app.MapPatch("/icecreams/{id}", ([FromBody] Icecream icecream, int id, IIcecreamService icecreamService) => {
     try {
-        return Results.Ok(icecreamService.UpdateIcecream(icecream));
+        return Results.Ok(icecreamService.UpdateIcecream(icecream, id));
     }
     catch (ArgumentException ex) {
         return Results.Problem(ex.Message, statusCode: 400);
@@ -69,9 +74,9 @@ app.MapPatch("/icecreams", (Icecream icecream, IIcecreamService icecreamService)
     }
 });
 
-app.MapDelete("/icecreams", (Icecream icecream, IIcecreamService icecreamService) => {
+app.MapDelete("/icecreams{id}", (int id, IIcecreamService icecreamService) => {
     try {
-        return Results.Ok(icecreamService.DeleteIcecream(icecream));
+        return Results.Ok(icecreamService.DeleteIcecream(id));
     }
     catch (ArgumentException ex) {
         return Results.Problem(ex.Message, statusCode: 400);
@@ -102,7 +107,7 @@ app.MapGet("/cashiers", (ICashierService cashierService) => {
     }
 });
 
-app.MapPost("/cashiers", (Cashier cashier, ICashierService cashierService) => {
+app.MapPost("/cashiers", ([FromBody] Cashier cashier, ICashierService cashierService) => {
     try {
         return Results.Created("/cashiers/{cashier.PhoneNumber}", cashierService.AddCashier(cashier));
     }
@@ -114,7 +119,7 @@ app.MapPost("/cashiers", (Cashier cashier, ICashierService cashierService) => {
     }
 });
 
-app.MapPatch("/cashiers", (Cashier cashier, ICashierService cashierService) => {
+app.MapPatch("/cashiers", ([FromBody] Cashier cashier, ICashierService cashierService) => {
     try {
         return Results.Ok(cashierService.UpdateCashier(cashier));
     }
@@ -126,7 +131,7 @@ app.MapPatch("/cashiers", (Cashier cashier, ICashierService cashierService) => {
     }
 });
 
-app.MapDelete("/cashiers", (Cashier cashier, ICashierService cashierService) => {
+app.MapDelete("/cashiers", ([FromBody] Cashier cashier, ICashierService cashierService) => {
     try {
         return Results.Ok(cashierService.DeleteCashier(cashier));
     }
@@ -147,7 +152,7 @@ app.MapGet("/customers", (ICustomerService customerService) => {
     }
 });
 
-app.MapPost("/customers", (Customer customer, ICustomerService customerService) => {
+app.MapPost("/customers", ([FromBody] Customer customer, ICustomerService customerService) => {
     try {
         return Results.Ok(customerService.AddCustomer(customer));
     }
@@ -159,7 +164,7 @@ app.MapPost("/customers", (Customer customer, ICustomerService customerService) 
     }
 });
 
-app.MapPatch("/customers", (Customer customer, ICustomerService customerService) => {
+app.MapPatch("/customers", ([FromBody] Customer customer, ICustomerService customerService) => {
     try {
         return Results.Created("/customers/{customer.Email}", customerService.UpdateCustomer(customer));
     }
@@ -192,7 +197,7 @@ app.MapGet("/transactions", (ITransactionService transactionService) => {
     }
 }); 
 
-app.MapPost("/transactions", (TransactionRequestDTO transactionRequest, ITransactionService transactionService) => {
+app.MapPost("/transactions", ([FromBody] TransactionRequestDTO transactionRequest, ITransactionService transactionService) => {
     try {
         var transaction = transactionService.MakeTransaction(transactionRequest);
         return Results.Created("/customers/{transaction.Id}", transaction);
@@ -205,9 +210,9 @@ app.MapPost("/transactions", (TransactionRequestDTO transactionRequest, ITransac
     }
 });
 
-app.MapPatch("/transactions", (IcecreamShopAPI.Transaction transaction, ITransactionService transactionService) => {
+app.MapPatch("/transactions/{id}", ([FromBody] Transaction transaction, int id, ITransactionService transactionService) => {
     try {
-        return Results.Ok(transactionService.UpdateTransaction(transaction));
+        return Results.Ok(transactionService.UpdateTransaction(transaction, id));
     }
     catch (ArgumentException ex) {
         return Results.Problem(ex.Message, statusCode: 400);
@@ -217,9 +222,9 @@ app.MapPatch("/transactions", (IcecreamShopAPI.Transaction transaction, ITransac
     }
 });
 
-app.MapDelete("/transactions", (IcecreamShopAPI.Transaction transaction, ITransactionService transactionService) => {
+app.MapDelete("/transactions/{id}", (int id, ITransactionService transactionService) => {
     try {
-        return Results.Ok(transactionService.DeleteTransaction(transaction));
+        return Results.Ok(transactionService.DeleteTransaction(id));
     }
     catch (ArgumentException ex) {
         return Results.Problem(ex.Message, statusCode: 400);
