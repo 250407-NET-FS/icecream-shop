@@ -1,62 +1,43 @@
 using IcecreamShopAPI.Repositories.Interfaces;
 using IcecreamShopAPI.Models;
 using System.Text.Json;
+using IcecreamShopAPI.Data;
 
 namespace IcecreamShopAPI.Repositories {
     public class TransactionRepo: ITransactionRepo {
-        private readonly string _jsonPath;
+        private readonly ShopDbContext _shopDb;
 
-        public TransactionRepo() {
-            _jsonPath = "./Data/transactions.json";
+        public TransactionRepo(ShopDbContext context) {
+            _shopDb = context;
         }
+
         public List<Transaction> GetTransactions() {
-            try {
-                if (!File.Exists(_jsonPath)) {
-                    return [];
-                }
+            return _shopDb.Transactions.ToList();
+        }
 
-                using FileStream reader = File.OpenRead(_jsonPath);
-                return JsonSerializer.Deserialize<List<Transaction>>(reader) ?? [];
-            }
-            catch (Exception) {
-                throw new Exception("Could not retrieve list of transactions");
-            }
-        }
         public List<Transaction> GetTransactionsByDate(DateTime date) {
-            List<Transaction> transactions = GetTransactions();
-            return transactions.FindAll(t => t.CreatedDate.Date.Equals(date.Date));
+            return GetTransactions().FindAll(d => d.Equals(date));
         }
+
         public Transaction GetTransactionById(int id) {
-            try {
-                List<Transaction> transactions = GetTransactions();
-                return transactions[id];
-            }
-            catch (IndexOutOfRangeException) {
-                throw new("Could not find transaction with specified id");
-            }
+            return _shopDb.Transactions.Find(id)!;
         }
+
         public Transaction AddTransaction(Transaction transaction) {
-            List<Transaction> transactions = GetTransactions();
-            transactions.Add(transaction);
-            SaveTransactionList(transactions);
+            _shopDb.Transactions.Add(transaction);
+            _shopDb.SaveChanges();
             return transaction;
         }
-        public void SaveTransactionList(List<Transaction> transactions) {
-            FileStream writer = File.Create(_jsonPath);
-            JsonSerializer.Serialize(writer, transactions);
-            writer.Close();
-        }
-        public Transaction UpdateTransaction(Transaction transaction, int id) {
-            List<Transaction> transactions = GetTransactions();
-            transactions[id] = transaction;
-            SaveTransactionList(transactions);
+
+        public Transaction UpdateTransaction(Transaction transaction) {
+            _shopDb.Transactions.Update(transaction);
+            _shopDb.SaveChanges();
             return transaction;
         }
         public Transaction DeleteTransaction(int id) {
-            List<Transaction> transactions = GetTransactions();
-            Transaction transaction = transactions[id];
-            transactions.RemoveAt(id);
-            SaveTransactionList(transactions);
+            Transaction transaction = GetTransactionById(id);
+            _shopDb.Transactions.Remove(transaction);
+            _shopDb.SaveChanges();
             return transaction;
         }
     }

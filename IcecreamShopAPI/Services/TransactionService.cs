@@ -67,10 +67,10 @@ namespace IcecreamShopAPI.Services {
         public List<Transaction> GetTransactions() {
             return _transactionRepo.GetTransactions();
         }
-        public Transaction UpdateTransaction(Transaction transaction, int id) {
+        public Transaction UpdateTransaction(Transaction transaction) {
             if (ValidateTransaction(transaction)) {
                 transaction.TotalCost = CalculateTotalCost(transaction.Icecreams);
-                return _transactionRepo.UpdateTransaction(transaction, id);
+                return _transactionRepo.UpdateTransaction(transaction);
             }
             else {
                 throw new ArgumentException("Transaction contains invalid input");

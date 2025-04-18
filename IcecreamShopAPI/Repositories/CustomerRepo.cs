@@ -1,63 +1,37 @@
 using System.Text.Json;
+using IcecreamShopAPI.Data;
 using IcecreamShopAPI.Models;
 using IcecreamShopAPI.Repositories.Interfaces;
 
 namespace IcecreamShopAPI.Repositories {
     public class CustomerRepo : ICustomerRepo {
-        private readonly string _jsonPath;
+        private readonly ShopDbContext _shopDb;
 
-        public CustomerRepo() {
-            _jsonPath = "./Data/customers.json";
+        public CustomerRepo(ShopDbContext context) {
+            _shopDb = context;
         }
         public List<Customer> GetCustomers() {
-            try {
-                if (!File.Exists(_jsonPath)) {
-                    return [];
-                }
-
-                using FileStream reader = File.OpenRead(_jsonPath);
-                return JsonSerializer.Deserialize<List<Customer>>(reader) ?? [];
-            }
-            catch (Exception) {
-                throw new Exception("Could not retrieve list of customers");
-            }
+            return _shopDb.Customers.ToList();
         }
         public Customer GetCustomerByEmail(string email) {
-            try {
-                List<Customer> customers = GetCustomers();
-                return customers.Find(c => c.Email.Equals(email))!;
-            }
-            catch (ArgumentNullException) {
-                throw new ("Could not find customer with specified email");
-            }
-
+            return _shopDb.Customers.Find(email)!;
         }
         public Customer AddCustomer(Customer customer) {
-            List<Customer> customers = GetCustomers();
-            if (customers.Any(c => c.Email.Equals(customer.Email))) {
-                throw new Exception("Customer already exists");
-            }
-            customers.Add(customer);
-            SaveCustomerList(customers);
+            _shopDb.Customers.Add(customer);
+            _shopDb.SaveChanges();
             return customer;
         }
-        public void SaveCustomerList(List<Customer> customers) {
-            FileStream writer = File.OpenWrite(_jsonPath);
-            JsonSerializer.Serialize(writer, customers);
-            writer.Close();
-        }
+
         public Customer UpdateCustomer(Customer customer) {
-            List<Customer> customers = GetCustomers();
-            var index = customers.FindIndex(c => c.Email.Equals(customer.Email));
-            customers[index] = customer;
-            SaveCustomerList(customers);
+            _shopDb.Customers.Update(customer);
+            _shopDb.SaveChanges();
             return customer;
         }
+
         public Customer RemoveCustomer(string email) {
-            List<Customer> customers = GetCustomers();
-            Customer customer = customers.Find(c => c.Email.Equals(email))!;
-            customers.Remove(customer);
-            SaveCustomerList(customers);
+            Customer customer = GetCustomerByEmail(email);
+            _shopDb.Customers.Remove(customer);
+            _shopDb.SaveChanges();
             return customer;
         }
     }

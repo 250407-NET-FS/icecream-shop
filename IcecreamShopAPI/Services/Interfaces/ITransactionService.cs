@@ -6,7 +6,7 @@ namespace IcecreamShopAPI.Services.Interfaces {
         public Transaction MakeTransaction(TransactionRequestDTO transactionRequest);
         public double CalculateTotalCost(List<Icecream> icecreamList);
         public List<Transaction> GetTransactions();
-        public Transaction UpdateTransaction(Transaction transaction, int id);
+        public Transaction UpdateTransaction(Transaction transaction);
         public Transaction DeleteTransaction(int id);
     }
 }

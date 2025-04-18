@@ -14,15 +14,15 @@ string connection = File.ReadAllText("../conn_string.env");
 
 builder.Services.AddDbContext<ShopDbContext>(options => options.UseSqlServer(connection));
 
-builder.Services.AddSingleton<IIcecreamRepo, IceCreamRepo>();
-builder.Services.AddSingleton<ICashierRepo, CashierRepo>();
-builder.Services.AddSingleton<ICustomerRepo, CustomerRepo>();
-builder.Services.AddSingleton<ITransactionRepo, TransactionRepo>();
+builder.Services.AddScoped<IIcecreamRepo, IceCreamRepo>();
+builder.Services.AddScoped<ICashierRepo, CashierRepo>();
+builder.Services.AddScoped<ICustomerRepo, CustomerRepo>();
+builder.Services.AddScoped<ITransactionRepo, TransactionRepo>();
 
-builder.Services.AddSingleton<IIcecreamService, IcecreamService>();
-builder.Services.AddSingleton<ICashierService, CashierService>();
-builder.Services.AddSingleton<ICustomerService, CustomerService>();
-builder.Services.AddSingleton<ITransactionService, TransactionService>();
+builder.Services.AddScoped<IIcecreamService, IcecreamService>();
+builder.Services.AddScoped<ICashierService, CashierService>();
+builder.Services.AddScoped<ICustomerService, CustomerService>();
+builder.Services.AddScoped<ITransactionService, TransactionService>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddOpenApiDocument(config =>
@@ -71,9 +71,9 @@ app.MapPost("/icecreams", ([FromBody] Icecream icecream, IIcecreamService icecre
     }
 });
 
-app.MapPatch("/icecreams/{id}", ([FromBody] Icecream icecream, int id, IIcecreamService icecreamService) => {
+app.MapPatch("/icecreams", ([FromBody] Icecream icecream, IIcecreamService icecreamService) => {
     try {
-        return Results.Ok(icecreamService.UpdateIcecream(icecream, id));
+        return Results.Ok(icecreamService.UpdateIcecream(icecream));
     }
     catch (ArgumentException ex) {
         return Results.Problem(ex.Message, statusCode: 400);
@@ -219,9 +219,9 @@ app.MapPost("/transactions", ([FromBody] TransactionRequestDTO transactionReques
     }
 });
 
-app.MapPatch("/transactions/{id}", ([FromBody] Transaction transaction, int id, ITransactionService transactionService) => {
+app.MapPatch("/transactions", ([FromBody] Transaction transaction, ITransactionService transactionService) => {
     try {
-        return Results.Ok(transactionService.UpdateTransaction(transaction, id));
+        return Results.Ok(transactionService.UpdateTransaction(transaction));
     }
     catch (ArgumentException ex) {
         return Results.Problem(ex.Message, statusCode: 400);

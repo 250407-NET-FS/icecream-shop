@@ -23,9 +23,9 @@ namespace IcecreamShopAPI.Services {
                 throw new ArgumentException("Icecream has invalid input");
             }
         }
-        public Icecream UpdateIcecream(Icecream icecream, int id) {
+        public Icecream UpdateIcecream(Icecream icecream) {
             if (ValidateIcecream(icecream)) {
-                return _icecreamRepo.UpdateIcecream(icecream, id);
+                return _icecreamRepo.UpdateIcecream(icecream);
             }
             else {
                 throw new ArgumentException("Icecream has invalid input");

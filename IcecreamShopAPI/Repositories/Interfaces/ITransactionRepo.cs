@@ -6,8 +6,7 @@ namespace IcecreamShopAPI.Repositories.Interfaces {
         public List<Transaction> GetTransactionsByDate(DateTime date);
         public Transaction GetTransactionById(int id);
         public Transaction AddTransaction(Transaction transaction);
-        public void SaveTransactionList(List<Transaction> transactions);
-        public Transaction UpdateTransaction(Transaction transaction, int id);
+        public Transaction UpdateTransaction(Transaction transaction);
         public Transaction DeleteTransaction(int id);
     }
 }

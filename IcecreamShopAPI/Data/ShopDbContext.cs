@@ -3,7 +3,7 @@ using IcecreamShopAPI.Models;
 using Namotion.Reflection;
 
 namespace IcecreamShopAPI.Data {
-    class ShopDbContext: DbContext {
+    public class ShopDbContext: DbContext {
         public ShopDbContext(DbContextOptions options): base(options) {}
 
         public DbSet<Icecream> Icecreams{get; set;}
