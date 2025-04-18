@@ -50,7 +50,7 @@ namespace IceCreamShopAPITests {
                 IcecreamHistory = []
             };
 
-            customer.IcecreamHistory.Add([icecream], DateTime.Now);
+            customer.IcecreamHistory.Add(icecream);
 
             _customerRepo.Setup(r => r.GetCustomers()).Returns([customer]);
 
@@ -79,7 +79,7 @@ namespace IceCreamShopAPITests {
                 IcecreamHistory = []
             };
 
-            customer.IcecreamHistory.Add([icecream], DateTime.Now);
+            customer.IcecreamHistory.Add(icecream);
 
             _customerRepo.Setup(r => r.GetCustomers()).Returns([]);
 
@@ -108,7 +108,7 @@ namespace IceCreamShopAPITests {
                 IcecreamHistory = []
             };
 
-            customer.IcecreamHistory.Add([icecream], DateTime.Now);
+            customer.IcecreamHistory.Add(icecream);
 
             _customerRepo.Setup(r => r.GetCustomers()).Returns([]);
 
@@ -143,8 +143,8 @@ namespace IceCreamShopAPITests {
                 IcecreamHistory = []
             };  
 
-            customer.IcecreamHistory.Add([icecream], DateTime.Now);    
-            newCustomer.IcecreamHistory.Add([icecream], DateTime.Now);         
+            customer.IcecreamHistory.Add(icecream);    
+            newCustomer.IcecreamHistory.Add(icecream);         
 
             _customerRepo.Setup(r => r.GetCustomers()).Returns([customer]);
 
@@ -179,8 +179,8 @@ namespace IceCreamShopAPITests {
                 IcecreamHistory = []
             };  
 
-            customer.IcecreamHistory.Add([icecream], DateTime.Now);    
-            newCustomer.IcecreamHistory.Add([icecream], DateTime.Now);         
+            customer.IcecreamHistory.Add(icecream);    
+            newCustomer.IcecreamHistory.Add(icecream);         
 
             _customerRepo.Setup(r => r.GetCustomers()).Returns([customer]);
 
@@ -209,7 +209,7 @@ namespace IceCreamShopAPITests {
                 IcecreamHistory = []
             };
 
-            customer.IcecreamHistory.Add([icecream], DateTime.Now);
+            customer.IcecreamHistory.Add(icecream);
 
             _customerRepo.Setup(r => r.GetCustomers()).Returns([customer]);
 

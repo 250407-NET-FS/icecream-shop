@@ -6,6 +6,7 @@ using IcecreamShopAPI.DTOs;
 
 namespace IceCreamShopAPITests {
     public class TransactionTest {
+        private readonly Mock<IIcecreamRepo> _icecreamRepo = new();
         private readonly Mock<ITransactionRepo> _transactionRepo = new();
         private readonly Mock<ICashierRepo> _cashierRepo = new();
         private readonly Mock<ICustomerRepo> _customerRepo = new();
@@ -31,25 +32,24 @@ namespace IceCreamShopAPITests {
 
         public TransactionTest() {
             _transactionService = new(
-                _customerRepo.Object, _cashierRepo.Object, 
-                _transactionRepo.Object
+                _icecreamRepo.Object, _customerRepo.Object, 
+                _cashierRepo.Object, _transactionRepo.Object
             );
         }
 
         [Theory]
         [InlineData 
             (
-                Id, CashierName, PhoneNumber, CustomerName, Email, Total, Scoops, 
+                Id, PhoneNumber, CustomerName, Email, Total, Scoops, 
                 Flavor, OnCone, Topping, TestSize
             )
         ]
         public void CalculateTotalCost(
-            int _id, string _cashierName, string _phone, string _customerName, 
-            string _email, double _total, int _scoops, string _flavor, bool _onCone,
+            int _id, string _phone, string _customerName, string _email, 
+            double _total, int _scoops, string _flavor, bool _onCone,
             string _topping, int _size
         ) {
             Customer customer = new() {Name = _customerName, Email = _email};
-            Cashier cashier = new () {Name = _cashierName, PhoneNumber = _phone};
             Icecream icecream = new () {
                 Id = _id,
                 Scoops = _scoops, 
@@ -260,7 +260,7 @@ namespace IceCreamShopAPITests {
 
             _transactionRepo.Setup(r => r.GetTransactions()).Returns([transaction]);
 
-            Assert.Equal(newTransaction, _transactionService.UpdateTransaction(newTransaction, _id));
+            Assert.Equal(newTransaction, _transactionService.UpdateTransaction(newTransaction));
         }
 
         [Theory, Trait("Category", "UpdateTransaction")]
@@ -312,7 +312,7 @@ namespace IceCreamShopAPITests {
 
             _transactionRepo.Setup(r => r.GetTransactions()).Returns([transaction]);
 
-            Assert.Throws<ArgumentException>(() => _transactionService.UpdateTransaction(newTransaction, _id));
+            Assert.Throws<ArgumentException>(() => _transactionService.UpdateTransaction(newTransaction));
         }
 
         [Theory, Trait("Category", "DeleteTransaction")]

@@ -10,7 +10,7 @@ namespace IceCreamShopAPITests {
         private readonly IcecreamService _icecreamService;
 
         // Test data 
-        private const int Id = 0;
+        private const int Id = 1;
         private const int Scoops = 2;
         // To be converted as a list in the test
         private const string Flavor1 = "Blueberry";
@@ -131,7 +131,7 @@ namespace IceCreamShopAPITests {
             _icecreamRepo.Setup(r => r.GetAllIcecream()).Returns([icecream]);
 
             // Assert
-            Assert.Equal(newIcecream, _icecreamService.UpdateIcecream(newIcecream, _id));
+            Assert.Equal(newIcecream, _icecreamService.UpdateIcecream(newIcecream));
         }
 
         [Theory, Trait("Category", "UpdateIcecream")]
@@ -165,7 +165,7 @@ namespace IceCreamShopAPITests {
             _icecreamRepo.Setup(r => r.GetAllIcecream()).Returns([icecream]);
 
             // Assert
-            Assert.Throws<ArgumentException>(() => _icecreamService.UpdateIcecream(newIcecream, _id));
+            Assert.Throws<ArgumentException>(() => _icecreamService.UpdateIcecream(newIcecream));
         }
 
         [Theory, Trait("Category", "DeleteIcecream")]
