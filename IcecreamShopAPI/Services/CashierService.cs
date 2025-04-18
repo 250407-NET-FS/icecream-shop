@@ -51,7 +51,7 @@ namespace IcecreamShopAPI.Services {
                 throw new ArgumentException("Phone number invalid");
             }
         }
-        [GeneratedRegex(@"^[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]")]
+        [GeneratedRegex(@"[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]")]
         private static partial Regex PhoneRegex();
     }
 }

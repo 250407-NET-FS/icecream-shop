@@ -16,8 +16,8 @@ namespace IcecreamShopAPI.Repositories {
                     return [];
                 }
 
-                using FileStream stream = File.OpenRead(_jsonPath);
-                return JsonSerializer.Deserialize<List<Icecream>>(stream) ?? [];
+                using FileStream reader = File.OpenRead(_jsonPath);
+                return JsonSerializer.Deserialize<List<Icecream>>(reader) ?? [];
             }
             catch (Exception) {
                 throw new Exception("Could not retrieve any icecream");
@@ -31,17 +31,16 @@ namespace IcecreamShopAPI.Repositories {
             return icecream;
         }
 
-        public Icecream UpdateIcecream(Icecream icecream) {
+        public Icecream UpdateIcecream(Icecream icecream, int id) {
             List<Icecream> icecreams = GetAllIcecream();
-            int index = icecreams.FindIndex(i => i.Id.Equals(icecream.Id));
-            icecream.Customers = icecreams[index].Customers;
-            icecreams[index] = icecream;
+            icecreams[id] = icecream;
             SaveIcecreamList(icecreams);
             return icecream;
         }
 
-        public Icecream RemoveIcecream(Icecream icecream) {
+        public Icecream RemoveIcecream(int id) {
             List<Icecream> icecreams = GetAllIcecream();
+            Icecream icecream = icecreams[id];
             icecreams.Remove(icecream);
             SaveIcecreamList(icecreams);
             return icecream;

@@ -1,5 +1,6 @@
-using System.Text.Json;
 using IcecreamShopAPI.Repositories.Interfaces;
+using IcecreamShopAPI.Models;
+using System.Text.Json;
 
 namespace IcecreamShopAPI.Repositories {
     public class TransactionRepo: ITransactionRepo {
@@ -25,12 +26,12 @@ namespace IcecreamShopAPI.Repositories {
             List<Transaction> transactions = GetTransactions();
             return transactions.FindAll(t => t.CreatedDate.Date.Equals(date.Date));
         }
-        public Transaction GetTransactionById(Guid id) {
+        public Transaction GetTransactionById(int id) {
             try {
                 List<Transaction> transactions = GetTransactions();
-                return transactions.Find(t => t.Id.Equals(id))!;
+                return transactions[id];
             }
-            catch (ArgumentNullException) {
+            catch (IndexOutOfRangeException) {
                 throw new("Could not find transaction with specified id");
             }
         }
@@ -45,16 +46,16 @@ namespace IcecreamShopAPI.Repositories {
             JsonSerializer.Serialize(writer, transactions);
             writer.Close();
         }
-        public Transaction UpdateTransaction(Transaction transaction) {
+        public Transaction UpdateTransaction(Transaction transaction, int id) {
             List<Transaction> transactions = GetTransactions();
-            int index = transactions.FindIndex(t => t.Id.Equals(transaction.Id));
-            transactions[index] = transaction;
+            transactions[id] = transaction;
             SaveTransactionList(transactions);
             return transaction;
         }
-        public Transaction DeleteTransaction(Transaction transaction) {
+        public Transaction DeleteTransaction(int id) {
             List<Transaction> transactions = GetTransactions();
-            transactions.Remove(transaction);
+            Transaction transaction = transactions[id];
+            transactions.RemoveAt(id);
             SaveTransactionList(transactions);
             return transaction;
         }

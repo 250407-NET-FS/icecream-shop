@@ -45,7 +45,7 @@ namespace IcecreamShopAPI.Services {
         public List<Customer> GetCustomerList() {
             return _customerRepo.GetCustomers();
         }
-        [GeneratedRegex(@"^[a-z0-9]+@[a-z]\.com")]
+        [GeneratedRegex(@"^[a-z0-9]+@[a-z]+\.[a-z]+")]
         private static partial Regex EmailRegex();
     }
 }

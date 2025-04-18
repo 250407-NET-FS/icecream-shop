@@ -39,7 +39,7 @@ namespace IcecreamShopAPI.Services {
                 return transaction;
             }
             catch (ArgumentNullException ex) {
-                throw new(ex.Message);
+                throw new ArgumentNullException(ex.Message);
             } 
         }
         public double CalculateTotalCost(List<Icecream> icecreamList) {
@@ -49,10 +49,10 @@ namespace IcecreamShopAPI.Services {
                 if (icecream.OnCone) {
                     cost += 2;
                 }
-                cost += (icecream.Scoops + (icecream.Toppings.Count * 0.25)) * ((int)icecream.Size);
+                cost += (icecream.Scoops + (icecream.Toppings.Count * 0.25)) * ((int)icecream.Size + 1);
             }
             // tax = 15%
-            return cost *= 1.15;
+            return Math.Round(cost * 1.15, 2);
         }
         public bool ValidateTransaction(Transaction transaction) {
             return (
@@ -64,21 +64,17 @@ namespace IcecreamShopAPI.Services {
         public List<Transaction> GetTransactions() {
             return _transactionRepo.GetTransactions();
         }
-        public Transaction UpdateTransaction(Transaction transaction) {
+        public Transaction UpdateTransaction(Transaction transaction, int id) {
             if (ValidateTransaction(transaction)) {
-                return _transactionRepo.UpdateTransaction(transaction);
+                transaction.TotalCost = CalculateTotalCost(transaction.Icecreams);
+                return _transactionRepo.UpdateTransaction(transaction, id);
             }
             else {
                 throw new ArgumentException("Transaction contains invalid input");
             }
         }
-        public Transaction DeleteTransaction(Transaction transaction) {
-            if (ValidateTransaction(transaction)) {
-                return _transactionRepo.DeleteTransaction(transaction);
-            }
-            else {
-                throw new ArgumentException("Transaction contains invalid input");
-            }
+        public Transaction DeleteTransaction(int id) {
+                return _transactionRepo.DeleteTransaction(id);
         }
     }
 }
