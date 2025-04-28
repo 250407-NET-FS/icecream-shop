@@ -2,16 +2,22 @@ main();
 
 function main() {
     let nodeList = document.getElementById("icecreamList");
-    AddIcecream(nodeList, "Vanilla Icecream");
-    printIcecreams(nodeList.childNodes);
+    document.getElementById("printIcecreams").addEventListener("click", () => {
+        printIcecreams(nodeList.childNodes);
+    });
+    document.getElementById("addIcecream").addEventListener("click", () => {
+        AddIcecream(nodeList);
+    });
+
 }
 
-function AddIcecream(list, input) {
+function AddIcecream(list) {
     let item = document.createElement("li");
+    let input = document.getElementById("icecreamInput").value;
     item.setAttribute("class", "icecreamList");
     item.appendChild(new Text(input));
     list.append(item);
-    console.log(list);
+    console.log(input);
 }
 
 function printIcecreams(list) {
