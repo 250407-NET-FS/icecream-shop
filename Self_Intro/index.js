@@ -8,7 +8,6 @@ function main() {
     document.getElementById("addIcecream").addEventListener("click", () => {
         AddIcecream(nodeList);
     });
-
 }
 
 function AddIcecream(list) {
@@ -26,6 +25,17 @@ function printIcecreams(list) {
     for (let i = 1; i < list.length; i += 2) {
         res.push(list[i].firstChild.data);
     }
-
-    alert(res);
+    // for Challenge V
+    //alert(res);
+    Toastify({
+        text: res,
+        duration: 2000,
+        close: true,
+        gravity: "top",
+        position: "right",
+        stopOnFocus: true,
+        style: {
+            background: "linear-gradient(to right, #00b09b, #96c93d)",
+        }
+    }).showToast();
 }
